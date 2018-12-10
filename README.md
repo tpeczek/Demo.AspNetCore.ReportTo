@@ -1,6 +1,8 @@
 # Demo.AspNetCore.ReportTo
 
-Sample application experimenting with Report-To header and receiving reports (Report API).
+Sample application experimenting with Report-To header and receiving reports (Report API). You can read more here:
+
+- [An early look at Reporting API in ASP.NET Core](https://www.tpeczek.com/2018/09/an-early-look-at-reporting-api-in.html)
 
 ## Donating
 
