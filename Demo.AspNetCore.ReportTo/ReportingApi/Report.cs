@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Demo.AspNetCore.ReportTo.ReportingApi
 {
@@ -10,19 +10,19 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
         public const string REPORT_TYPE_DEPRECATION = "deprecation";
         public const string REPORT_TYPE_NETWORK_ERROR = "network-error";
 
-        [JsonProperty(PropertyName = "type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty(PropertyName = "age")]
+        [JsonPropertyName("age")]
         public uint Age { get; set; }
 
-        [JsonProperty(PropertyName = "url")]
+        [JsonPropertyName("url")]
         public string Url { get; set; }
 
-        [JsonProperty(PropertyName = "user_agent")]
+        [JsonPropertyName("user_agent")]
         public string UserAgent { get; set; }
 
-        [JsonProperty(PropertyName = "body")]
+        [JsonPropertyName("body")]
         public IDictionary<string, object> Body { get; set; }
     }
 }

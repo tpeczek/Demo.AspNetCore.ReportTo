@@ -1,17 +1,17 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Demo.AspNetCore.ReportTo.ReportingApi.Http.Headers
 {
     internal struct ReportToEndpoint
     {
-        [JsonProperty(PropertyName = "url")]
+        [JsonPropertyName("url")]
         public string Url { get; }
 
-        [JsonProperty(PropertyName = "priority", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("priority")]
         public uint? Priority { get; }
 
-        [JsonProperty(PropertyName = "weight", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("weight")]
         public uint? Weight { get; }
 
         public ReportToEndpoint(string url, uint? priority = null, uint? weight = null)

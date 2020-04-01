@@ -1,25 +1,28 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Demo.AspNetCore.ReportTo.ReportingApi.Http.Headers
 {
     internal class ReportToHeaderValue
     {
-        [JsonProperty(PropertyName = "group", NullValueHandling = NullValueHandling.Ignore)]
+        private static readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+
+        [JsonPropertyName("group")]
         public string Group { get; set; }
 
-        [JsonProperty(PropertyName = "include_subdomains", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("include_subdomains")]
         public bool? IncludeSubdomains { get; set; }
 
-        [JsonProperty(PropertyName = "max_age")]
+        [JsonPropertyName("max_age")]
         public uint MaxAge { get; set; } = 10886400;
 
-        [JsonProperty(PropertyName = "endpoints")]
+        [JsonPropertyName("endpoints")]
         public IList<ReportToEndpoint> Endpoints { get; } = new List<ReportToEndpoint>();
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonSerializer.Serialize(this, _serializerOptions);
         }
     }
 }

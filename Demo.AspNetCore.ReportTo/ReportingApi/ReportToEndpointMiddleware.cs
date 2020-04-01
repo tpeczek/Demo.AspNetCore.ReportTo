@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Demo.AspNetCore.ReportTo.ReportingApi
 {
@@ -25,17 +25,7 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
         {
             if (IsReportsRequest(context.Request))
             {
-                List<Report> reports = null;
-
-                using (StreamReader requestBodyReader = new StreamReader(context.Request.Body))
-                {
-                    using (JsonReader requestBodyJsonReader = new JsonTextReader(requestBodyReader))
-                    {
-                        JsonSerializer serializer = new JsonSerializer();
-
-                        reports = serializer.Deserialize <List<Report>>(requestBodyJsonReader);
-                    }
-                }
+                List<Report> reports = await JsonSerializer.DeserializeAsync<List<Report>>(context.Request.Body);
 
                 LogReports(reports);
 
