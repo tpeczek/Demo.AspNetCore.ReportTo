@@ -51,8 +51,7 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
                     switch (report.Type.ToLowerInvariant())
                     {
                         case Report.REPORT_TYPE_DEPRECATION:
-                            _logger.LogWarning("Deprecation reported for file {SourceFile} (Line: {LineNumber}, Column: {ColumnNumber}): '{Message}'",
-                                report.Body["sourceFile"], report.Body["lineNumber"], report.Body["columnNumber"], report.Body["message"]);
+                            LogReport(new DeprecationReportBody(report.Body));
                             break;
                         default:
                             _logger.LogInformation("Browser report of type '{ReportType}' received.", report.Type);
@@ -60,6 +59,12 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
                     }
                 }
             }
+        }
+
+        private void LogReport(DeprecationReportBody reportBody)
+        {
+            _logger.LogWarning("Deprecation reported for file {SourceFile} (Line: {LineNumber}, Column: {ColumnNumber}): '{Message}'",
+                reportBody.SourceFile, reportBody.LineNumber, reportBody.ColumnNumber, reportBody.Message);
         }
     }
 }
