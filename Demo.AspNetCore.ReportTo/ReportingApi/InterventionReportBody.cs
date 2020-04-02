@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 namespace Demo.AspNetCore.ReportTo.ReportingApi
 {
-    internal class DeprecationReportBody
+    internal class InterventionReportBody
     {
         private const string ID = "id";
-        private const string ANTICIPATED_REMOVAL = "anticipatedRemoval";
         private const string MESSAGE = "message";
         private const string SOURCE_FILE = "sourceFile";
         private const string LINE_NUMBER = "lineNumber";
@@ -17,11 +16,6 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
         public string Id
         {
             get { return _reportBody[ID].ToString(); }
-        }
-
-        public string AnticipatedRemoval
-        {
-            get { return GetStringFromBody(ANTICIPATED_REMOVAL); }
         }
 
         public string Message
@@ -44,7 +38,7 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
             get { return GetInt32FromBody(COLUMN_NUMBER); }
         }
 
-        public DeprecationReportBody(IDictionary<string, object> reportBody)
+        public InterventionReportBody(IDictionary<string, object> reportBody)
         {
             _reportBody = reportBody ?? throw new ArgumentNullException(nameof(reportBody));
         }

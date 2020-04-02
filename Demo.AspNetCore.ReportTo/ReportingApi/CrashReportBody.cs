@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Demo.AspNetCore.ReportTo.ReportingApi
 {
-    public class CrashReportBody
+    internal class CrashReportBody
     {
         private const string REASON = "reason";
 

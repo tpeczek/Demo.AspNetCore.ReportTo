@@ -53,6 +53,9 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
                         case Report.REPORT_TYPE_DEPRECATION:
                             LogReport(new DeprecationReportBody(report.Body));
                             break;
+                        case Report.REPORT_TYPE_INTERVENTION:
+                            LogReport(new InterventionReportBody(report.Body));
+                            break;
                         case Report.REPORT_TYPE_CRASH:
                             LogReport(new CrashReportBody(report.Body));
                             break;
@@ -67,6 +70,12 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
         private void LogReport(DeprecationReportBody reportBody)
         {
             _logger.LogWarning("Deprecation reported for file {SourceFile} (Line: {LineNumber}, Column: {ColumnNumber}): '{Message}'",
+                reportBody.SourceFile, reportBody.LineNumber, reportBody.ColumnNumber, reportBody.Message);
+        }
+
+        private void LogReport(InterventionReportBody reportBody)
+        {
+            _logger.LogWarning("Request made by the website has been denied by the browser for file {SourceFile} (Line: {LineNumber}, Column: {ColumnNumber}): '{Message}'",
                 reportBody.SourceFile, reportBody.LineNumber, reportBody.ColumnNumber, reportBody.Message);
         }
 
