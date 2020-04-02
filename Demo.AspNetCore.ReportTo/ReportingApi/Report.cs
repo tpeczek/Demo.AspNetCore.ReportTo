@@ -8,6 +8,7 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
         public const string REPORT_TYPE_CSP = "csp";
         public const string REPORT_TYPE_INTERVENTION = "intervention";
         public const string REPORT_TYPE_DEPRECATION = "deprecation";
+        public const string REPORT_TYPE_CRASH = "crash";
         public const string REPORT_TYPE_NETWORK_ERROR = "network-error";
 
         [JsonPropertyName("type")]

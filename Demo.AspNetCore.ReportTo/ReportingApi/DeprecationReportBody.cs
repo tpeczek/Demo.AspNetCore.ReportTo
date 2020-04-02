@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Demo.AspNetCore.ReportTo.ReportingApi
 {
@@ -18,7 +16,7 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
 
         public string Id
         {
-            get { return GetStringFromBody(ID); }
+            get { return _reportBody[ID].ToString(); }
         }
 
         public string AnticipatedRemoval
@@ -28,7 +26,7 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
 
         public string Message
         {
-            get { return GetStringFromBody(MESSAGE); }
+            get { return _reportBody[MESSAGE].ToString(); }
         }
 
         public string SourceFile
