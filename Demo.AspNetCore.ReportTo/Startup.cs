@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Demo.AspNetCore.ReportTo.ReportingApi;
 using Demo.AspNetCore.ReportTo.ReportingApi.Http.Headers;
 using Demo.AspNetCore.ReportTo.ReportingApi.Http.Extensions;
-using Microsoft.Extensions.Hosting;
 
 namespace Demo.AspNetCore.ReportTo
 {
     public class Startup
     {
+        private const int NetworkErrorLoggingMaxAge = 24 * 60 * 60;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -35,10 +37,21 @@ namespace Demo.AspNetCore.ReportTo
             {
                 OnPrepareResponse = ctx =>
                 {
-                    ReportToHeaderValue reportToValue = new ReportToHeaderValue();
-                    reportToValue.Endpoints.Add(new ReportToEndpoint("https://localhost:5001/report-to-endpoint"));
+                    const string networkErrorLoggingGroupName = "network-errors";
 
-                    ctx.Context.Response.AddReportToResponseHeader(reportToValue);
+                    ReportToHeaderValue defaultReportTo = new ReportToHeaderValue();
+                    defaultReportTo.Endpoints.Add(new ReportToEndpoint("https://localhost:5001/report-to-endpoint"));
+
+                    ReportToHeaderValue networkErrorLoggingReportTo = new ReportToHeaderValue { Group = networkErrorLoggingGroupName };
+                    networkErrorLoggingReportTo.Endpoints.Add(new ReportToEndpoint("https://localhost:5001/report-to-endpoint"));
+
+                    NetworkErrorLoggingHeaderValue networkErrorLoggingValue = new NetworkErrorLoggingHeaderValue(networkErrorLoggingGroupName, NetworkErrorLoggingMaxAge);
+                    networkErrorLoggingValue.RequestHeaders.Add("accept-language");
+                    networkErrorLoggingValue.RequestHeaders.Add("accept-encoding");
+
+                    ctx.Context.Response.AddReportToResponseHeader(defaultReportTo);
+                    ctx.Context.Response.AddReportToResponseHeader(networkErrorLoggingReportTo);
+                    ctx.Context.Response.AddNetworkErrorLoggingResponseHeader(networkErrorLoggingValue);
                 }
             });
 
@@ -46,11 +59,13 @@ namespace Demo.AspNetCore.ReportTo
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapReportToEndpoint("/report-to-endpoint");
-            });
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("-- Demo.AspNetCore.ReportTo --");
+                endpoints.Map("/xhr", context =>
+                {
+                    context.Response.StatusCode = 500;
+
+                    return Task.CompletedTask;
+                });
             });
         }
     }

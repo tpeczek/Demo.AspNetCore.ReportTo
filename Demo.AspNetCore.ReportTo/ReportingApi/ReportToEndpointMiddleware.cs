@@ -59,8 +59,11 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
                         case Report.REPORT_TYPE_CRASH:
                             LogReport(new CrashReportBody(report.Body));
                             break;
+                        case Report.REPORT_TYPE_NETWORK_ERROR:
+                            LogReport(report.Url, new NetworkErrorLoggingReportBody(report.Body));
+                            break;
                         default:
-                            _logger.LogInformation("Browser report of type '{ReportType}' received.", report.Type);
+                            _logger.LogWarning("Browser report of type '{ReportType}' received.", report.Type);
                             break;
                     }
                 }
@@ -82,6 +85,11 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi
         private void LogReport(CrashReportBody reportBody)
         {
             _logger.LogWarning("The website stopped running due to a browser crash. Reason: {Reason}", reportBody.Reason);
+        }
+
+        private void LogReport(string url, NetworkErrorLoggingReportBody reportBody)
+        {
+            _logger.LogWarning("Network error occured for {Method} request to {URL} (Status Code: {StatusCode}, Type: {Type}, Phase: {Phase})", reportBody.Method, url, reportBody.StatusCode, reportBody.Type, reportBody.Phase);
         }
     }
 }

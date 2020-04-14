@@ -16,11 +16,28 @@ namespace Demo.AspNetCore.ReportTo.ReportingApi.Http.Extensions
             {
                 if (response.Headers.ContainsKey(HeaderNames.ReportTo))
                 {
-                    response.Headers[HeaderNames.ReportTo] = (StringValues)response.Headers[HeaderNames.ReportTo].Append(reportToHeaderValue);
+                    response.Headers[HeaderNames.ReportTo] = new StringValues(response.Headers[HeaderNames.ReportTo].Append(reportToHeaderValue).ToArray());
                 }
                 else
                 {
                     response.Headers[HeaderNames.ReportTo] = reportToHeaderValue;
+                }
+            }
+        }
+
+        public static void AddNetworkErrorLoggingResponseHeader(this HttpResponse response, NetworkErrorLoggingHeaderValue networkErrorLogging)
+        {
+            string networkErrorLoggingHeaderValue = networkErrorLogging?.ToString();
+
+            if (!String.IsNullOrWhiteSpace(networkErrorLoggingHeaderValue))
+            {
+                if (response.Headers.ContainsKey(HeaderNames.NetworkErrorLogging))
+                {
+                    response.Headers[HeaderNames.NetworkErrorLogging] = new StringValues(response.Headers[HeaderNames.NetworkErrorLogging].Append(networkErrorLoggingHeaderValue).ToArray());
+                }
+                else
+                {
+                    response.Headers[HeaderNames.NetworkErrorLogging] = networkErrorLoggingHeaderValue;
                 }
             }
         }
